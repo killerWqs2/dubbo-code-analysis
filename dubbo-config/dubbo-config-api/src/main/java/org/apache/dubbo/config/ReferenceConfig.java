@@ -216,7 +216,10 @@ public class ReferenceConfig<T> extends AbstractReferenceConfig {
         if (StringUtils.isEmpty(interfaceName)) {
             throw new IllegalStateException("<dubbo:reference interface=\"\" /> interface not allow null!");
         }
+        // 完成复合配置
         completeCompoundConfigs();
+
+        // 配置中心功能
         startConfigCenter();
         // get consumer's global configuration
         checkDefault();
@@ -240,12 +243,15 @@ public class ReferenceConfig<T> extends AbstractReferenceConfig {
         checkMetadataReport();
     }
 
+    /**我喜欢这种风格的写法， 简单几步直接告诉reviewer想干什么*/
     public synchronized T get() {
+        // 配置管理
         checkAndUpdateSubConfigs();
 
         if (destroyed) {
             throw new IllegalStateException("The invoker of ReferenceConfig(" + url + ") has already destroyed!");
         }
+        // 如何初始化
         if (ref == null) {
             init();
         }
@@ -318,14 +324,17 @@ public class ReferenceConfig<T> extends AbstractReferenceConfig {
             }
         }
 
+        // 所以说consumer是直接从系统环境变量和java系统变量中获取数据的？？？
         String hostToRegistry = ConfigUtils.getSystemProperty(DUBBO_IP_TO_REGISTRY);
         if (StringUtils.isEmpty(hostToRegistry)) {
+            // 如果没有则使用localhost
             hostToRegistry = NetUtils.getLocalHost();
         } else if (isInvalidLocalHost(hostToRegistry)) {
             throw new IllegalArgumentException("Specified invalid registry ip from property:" + DUBBO_IP_TO_REGISTRY + ", value:" + hostToRegistry);
         }
         map.put(REGISTER_IP_KEY, hostToRegistry);
 
+        // 这一步可定是关键一步
         ref = createProxy(map);
 
         String serviceKey = URL.buildKey(interfaceName, group, version);

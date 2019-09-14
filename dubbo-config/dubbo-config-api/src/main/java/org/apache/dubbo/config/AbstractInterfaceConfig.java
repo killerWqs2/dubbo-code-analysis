@@ -329,6 +329,7 @@ public abstract class AbstractInterfaceConfig extends AbstractMethodConfig {
         List<URL> registryList = new ArrayList<URL>();
         if (CollectionUtils.isNotEmpty(registries)) {
             for (RegistryConfig config : registries) {
+                // 获取仓库地址，地址可以是多个
                 String address = config.getAddress();
                 if (StringUtils.isEmpty(address)) {
                     address = ANYHOST_VALUE;

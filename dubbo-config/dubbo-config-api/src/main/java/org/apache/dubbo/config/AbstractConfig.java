@@ -152,6 +152,7 @@ public abstract class AbstractConfig implements Serializable {
         appendParameters(parameters, config, null);
     }
 
+    /**将配置项的参数加入到parameters,parameters应该是url参数*/
     @SuppressWarnings("unchecked")
     protected static void appendParameters(Map<String, String> parameters, Object config, String prefix) {
         if (config == null) {
@@ -161,21 +162,27 @@ public abstract class AbstractConfig implements Serializable {
         for (Method method : methods) {
             try {
                 String name = method.getName();
+                // 判断是否为getter函数
                 if (MethodUtils.isGetter(method)) {
+                    // 这里还是提取参数
                     Parameter parameter = method.getAnnotation(Parameter.class);
+                    // 配置项不可能为Object？或是为了排除什么？
                     if (method.getReturnType() == Object.class || parameter != null && parameter.excluded()) {
                         continue;
                     }
                     String key;
                     if (parameter != null && parameter.key().length() > 0) {
+                        // key名称从parameter中获取
                         key = parameter.key();
                     } else {
+                        // key名称从getter中获取
                         key = calculatePropertyFromGetter(name);
                     }
                     Object value = method.invoke(config);
                     String str = String.valueOf(value).trim();
                     if (value != null && str.length() > 0) {
                         if (parameter != null && parameter.escaped()) {
+                            // url转义
                             str = URL.encode(str);
                         }
                         if (parameter != null && parameter.append()) {
@@ -191,6 +198,7 @@ public abstract class AbstractConfig implements Serializable {
                         if (prefix != null && prefix.length() > 0) {
                             key = prefix + "." + key;
                         }
+                        // parameters添加
                         parameters.put(key, str);
                     } else if (parameter != null && parameter.required()) {
                         throw new IllegalStateException(config.getClass().getSimpleName() + "." + key + " == null");
@@ -218,6 +226,7 @@ public abstract class AbstractConfig implements Serializable {
         appendAttributes(parameters, config, null);
     }
 
+    /**配置@Parameter(attribute=true)， attribute， parameter*/
     @Deprecated
     protected static void appendAttributes(Map<String, Object> parameters, Object config, String prefix) {
         if (config == null) {
@@ -238,6 +247,7 @@ public abstract class AbstractConfig implements Serializable {
                     } else {
                         key = calculateAttributeFromGetter(name);
                     }
+                    // attribute没有前缀
                     Object value = method.invoke(config);
                     if (value != null) {
                         if (prefix != null && prefix.length() > 0) {
@@ -439,6 +449,7 @@ public abstract class AbstractConfig implements Serializable {
         }
     }
 
+    /**从注解中获取配置到配置项*/
     protected void appendAnnotation(Class<?> annotationClass, Object annotation) {
         Method[] methods = annotationClass.getMethods();
         for (Method method : methods) {
@@ -464,6 +475,7 @@ public abstract class AbstractConfig implements Serializable {
                             value = CollectionUtils.toStringMap((String[]) value);
                         }
                         try {
+                            // 获取Config配置类的setter方法将从注解类中获取的数据设置到Config中
                             Method setterMethod = getClass().getMethod(setter, parameterType);
                             setterMethod.invoke(this, value);
                         } catch (NoSuchMethodException e) {

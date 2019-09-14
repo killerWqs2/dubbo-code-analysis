@@ -95,6 +95,7 @@ import static org.apache.dubbo.common.utils.NetUtils.isInvalidLocalHost;
 import static org.apache.dubbo.common.utils.NetUtils.isInvalidPort;
 
 /**
+ * 这个类最重要的就是暴露出url
  * ServiceConfig
  *
  * @export
@@ -448,8 +449,10 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
         unexported = true;
     }
 
+    /**这一步应该不仅生成url、还应该启动了服务， 所以是怎么启动的，看源码不应该仅仅看怎么执行的，还应该看怎么写的*/
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void doExportUrls() {
+        // registryURLs 应该是registry地址
         List<URL> registryURLs = loadRegistries(true);
         for (ProtocolConfig protocolConfig : protocols) {
             String pathKey = URL.buildKey(getContextPath(protocolConfig).map(p -> p + "/" + path).orElse(path), group, version);
@@ -462,6 +465,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
     private void doExportUrlsFor1Protocol(ProtocolConfig protocolConfig, List<URL> registryURLs) {
         String name = protocolConfig.getName();
         if (StringUtils.isEmpty(name)) {
+            // 这里默认为DUBBO协议
             name = DUBBO;
         }
 
@@ -469,6 +473,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
         map.put(SIDE_KEY, PROVIDER_SIDE);
 
         appendRuntimeParameters(map);
+        // 这里将所有config中的getter方法能够获取到的参数
         appendParameters(map, metrics);
         appendParameters(map, application);
         appendParameters(map, module);
@@ -477,6 +482,8 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
         appendParameters(map, provider);
         appendParameters(map, protocolConfig);
         appendParameters(map, this);
+
+        // ? 处理methodConfig
         if (CollectionUtils.isNotEmpty(methods)) {
             for (MethodConfig method : methods) {
                 appendParameters(map, method, method.getName());
@@ -533,6 +540,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
             } // end of methods for
         }
 
+        // ? 什么是genericService
         if (ProtocolUtils.isGeneric(generic)) {
             map.put(GENERIC_KEY, generic);
             map.put(METHODS_KEY, ANY_VALUE);
@@ -550,16 +558,23 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
                 map.put(METHODS_KEY, StringUtils.join(new HashSet<String>(Arrays.asList(methods)), ","));
             }
         }
+
+        // 设置是否有token
         if (!ConfigUtils.isEmpty(token)) {
             if (ConfigUtils.isDefault(token)) {
+                // token是字符串形式的true，default
+                // 在map放入token:uuid
                 map.put(TOKEN_KEY, UUID.randomUUID().toString());
             } else {
+                // token不是默认值？这他妈是什么配置
                 map.put(TOKEN_KEY, token);
             }
         }
-        // export service
+        // export service，作者说说这里开始就是暴露服务
+        // 这里导出的是注册到registry的配置
         String host = this.findConfigedHosts(protocolConfig, registryURLs, map);
         Integer port = this.findConfigedPorts(protocolConfig, name, map);
+
         URL url = new URL(name, host, port, getContextPath(protocolConfig).map(p -> p + "/" + path).orElse(path), map);
 
         if (ExtensionLoader.getExtensionLoader(ConfiguratorFactory.class)
@@ -662,6 +677,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
 
     /**
      * Register & bind IP address for service provider, can be configured separately.
+     * 我有点好奇， 在docker中使用Environment配置的难道是环境变量
      * Configuration priority: environment variables -> java system properties -> host property in config file ->
      * /etc/hosts -> default network address -> first available network address
      *
@@ -672,16 +688,20 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
      */
     private String findConfigedHosts(ProtocolConfig protocolConfig, List<URL> registryURLs, Map<String, String> map) {
         boolean anyhost = false;
-
+        // 获取的这个IP地址不仅仅是绑定的ip，而且还是提供者的ip
+        // 从环境变量中获取地址，和java系统变量中获取
         String hostToBind = getValueFromConfig(protocolConfig, DUBBO_IP_TO_BIND);
         if (hostToBind != null && hostToBind.length() > 0 && isInvalidLocalHost(hostToBind)) {
+            // 如果是127,0.0.0.0， localhost会抛出异常
             throw new IllegalArgumentException("Specified invalid bind ip from property:" + DUBBO_IP_TO_BIND + ", value:" + hostToBind);
         }
 
         // if bind ip is not found in environment, keep looking up
         if (StringUtils.isEmpty(hostToBind)) {
+            // 从protocolconfig中获取
             hostToBind = protocolConfig.getHost();
             if (provider != null && StringUtils.isEmpty(hostToBind)) {
+                // 使用provider中的host覆盖protocolconfig中的host，然而实际效果并不是这样
                 hostToBind = provider.getHost();
             }
             if (isInvalidLocalHost(hostToBind)) {
@@ -718,12 +738,15 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
 
         map.put(Constants.BIND_IP_KEY, hostToBind);
 
+        // 这里好像是答案哎！
         // registry ip is not used for bind ip by default
+        //从系统环境变量中获取ip
         String hostToRegistry = getValueFromConfig(protocolConfig, DUBBO_IP_TO_REGISTRY);
         if (hostToRegistry != null && hostToRegistry.length() > 0 && isInvalidLocalHost(hostToRegistry)) {
             throw new IllegalArgumentException("Specified invalid registry ip from property:" + DUBBO_IP_TO_REGISTRY + ", value:" + hostToRegistry);
         } else if (StringUtils.isEmpty(hostToRegistry)) {
             // bind ip is used as registry ip by default
+            // 将要绑定的地址作为注册地址
             hostToRegistry = hostToBind;
         }
 
@@ -797,6 +820,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
         return port;
     }
 
+    /**这个方法有问题，不应该使用port变量，秀到我了*/
     private String getValueFromConfig(ProtocolConfig protocolConfig, String key) {
         String protocolPrefix = protocolConfig.getName().toUpperCase() + "_";
         String port = ConfigUtils.getSystemProperty(protocolPrefix + key);

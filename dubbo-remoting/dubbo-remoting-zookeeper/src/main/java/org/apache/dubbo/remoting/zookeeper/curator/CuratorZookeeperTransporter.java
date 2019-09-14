@@ -26,5 +26,4 @@ public class CuratorZookeeperTransporter extends AbstractZookeeperTransporter {
         return new CuratorZookeeperClient(url);
     }
 
-
 }
