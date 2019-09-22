@@ -26,7 +26,7 @@ public interface ExporterListener {
 
     /**
      * The exporter exported.
-     *
+     *  when the service export finished, it will be invoke
      * @param exporter
      * @throws RpcException
      * @see org.apache.dubbo.rpc.Protocol#export(Invoker)

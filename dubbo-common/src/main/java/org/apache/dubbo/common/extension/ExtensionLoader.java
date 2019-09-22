@@ -53,6 +53,8 @@ import static org.apache.dubbo.common.constants.CommonConstants.REMOVE_VALUE_PRE
 
 /**
  * Load dubbo extensions
+ * dubbo用来加载扩展点的类 在java中是通过ServiceLoader加载在meta-inf下的service目录下的文件，文件中包含了类名
+ * 同样spring也是spring加载meta-inf下的spring.factories中的类
  * <ul>
  * <li>auto inject dependency extension </li>
  * <li>auto wrap extension in wrapper </li>
@@ -72,18 +74,32 @@ public class ExtensionLoader<T> {
 
     private static final String DUBBO_DIRECTORY = "META-INF/dubbo/";
 
+    /**dubbo内部提供的扩展实现*/
     private static final String DUBBO_INTERNAL_DIRECTORY = DUBBO_DIRECTORY + "internal/";
 
     private static final Pattern NAME_SEPARATOR = Pattern.compile("\\s*[,]+\\s*");
 
+    /**为什么会有这个集合，可以加载同一个接口*/
     private static final ConcurrentMap<Class<?>, ExtensionLoader<?>> EXTENSION_LOADERS = new ConcurrentHashMap<>();
 
+    /**拓展实现类集合*/
     private static final ConcurrentMap<Class<?>, Object> EXTENSION_INSTANCES = new ConcurrentHashMap<>();
 
+    /**拓展接口*/
     private final Class<?> type;
 
+    /**用来实现ioc，di功能，实现注入功能*/
     private final ExtensionFactory objectFactory;
 
+    /**
+     * 拓展名与 @Activate 的映射
+     *
+     * This annotation is useful for automatically activate certain extensions with the given criteria， 根据条件激活扩展
+     *
+     * 例如，AccessLogFilter。
+     *
+     * 用于 {@link #getActivateExtension(URL, String)}
+     */
     private final ConcurrentMap<Class<?>, String> cachedNames = new ConcurrentHashMap<>();
 
     private final Holder<Map<String, Class<?>>> cachedClasses = new Holder<>();
@@ -97,6 +113,7 @@ public class ExtensionLoader<T> {
 
     private Set<Class<?>> cachedWrapperClasses;
 
+    /** 拓展名 与 加载对应拓展类发生的异常 的 映射*/
     private Map<String, IllegalStateException> exceptions = new ConcurrentHashMap<>();
 
     private ExtensionLoader(Class<?> type) {

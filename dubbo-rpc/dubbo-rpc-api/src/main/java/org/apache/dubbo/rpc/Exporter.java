@@ -27,7 +27,7 @@ public interface Exporter<T> {
 
     /**
      * get invoker.
-     *
+     * Exporter 调用 Invoker 其实都是组合
      * @return invoker
      */
     Invoker<T> getInvoker();

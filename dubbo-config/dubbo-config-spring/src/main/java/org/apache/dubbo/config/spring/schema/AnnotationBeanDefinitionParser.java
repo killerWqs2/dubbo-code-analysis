@@ -33,7 +33,7 @@ import static org.springframework.util.StringUtils.trimArrayElements;
 
 /**
  * @link BeanDefinitionParser}
- *
+ * 用来扫描package下的目录，服务，引用，扩展spi
  * @see ServiceAnnotationBeanPostProcessor
  * @see ReferenceAnnotationBeanPostProcessor
  * @since 2.5.9

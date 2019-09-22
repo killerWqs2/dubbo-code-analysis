@@ -55,7 +55,8 @@ import static org.apache.dubbo.common.constants.CommonConstants.HIDE_KEY_PREFIX;
 
 /**
  * AbstractBeanDefinitionParser
- *
+ * 将dubbo中的bean解析定义到spring factories， 继承了Spring的factories接口， 这是一个通用的类可以通用解析configs
+ * TODO 解析器不是用来解析xml的而是用来解析element的，这里应该是由spring调用，注册一个parser用来解析xml，所以肯定有个地方会读取dubbo.xml
  * @export
  */
 public class DubboBeanDefinitionParser implements BeanDefinitionParser {
@@ -76,6 +77,7 @@ public class DubboBeanDefinitionParser implements BeanDefinitionParser {
 
     @SuppressWarnings("unchecked")
     private static BeanDefinition parse(Element element, ParserContext parserContext, Class<?> beanClass, boolean required) {
+        // 这里都是config的处理，没有提及Element是如何得到的
         RootBeanDefinition beanDefinition = new RootBeanDefinition();
         beanDefinition.setBeanClass(beanClass);
         beanDefinition.setLazyInit(false);
@@ -324,6 +326,7 @@ public class DubboBeanDefinitionParser implements BeanDefinitionParser {
         }
         return parameters;
     }
+
 
     @SuppressWarnings("unchecked")
     private static void parseMethods(String id, NodeList nodeList, RootBeanDefinition beanDefinition,

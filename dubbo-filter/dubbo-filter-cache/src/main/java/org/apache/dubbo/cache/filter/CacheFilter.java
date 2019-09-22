@@ -67,6 +67,7 @@ import static org.apache.dubbo.common.constants.FilterConstants.CACHE_KEY;
 @Activate(group = {CONSUMER, PROVIDER}, value = CACHE_KEY)
 public class CacheFilter implements Filter {
 
+    /**这就是经典的组合*/
     private CacheFactory cacheFactory;
 
     /**
@@ -110,6 +111,7 @@ public class CacheFilter implements Filter {
                 return result;
             }
         }
+        // 没明白这一步是怎么回事，每调用一次都会移除一个filter执行下一个
         return invoker.invoke(invocation);
     }
 

@@ -20,7 +20,8 @@ import org.apache.dubbo.common.Node;
 
 /**
  * Invoker. (API/SPI, Prototype, ThreadSafe)
- *
+ * 这个是dubbo的核心模型，其他模型都会转换为他，ddd domain-driven-dev(just orientiend-object?)
+ * 而该 Invoker 实现了真正的远程服务调用。
  * @see org.apache.dubbo.rpc.Protocol#refer(Class, org.apache.dubbo.common.URL)
  * @see org.apache.dubbo.rpc.InvokerListener
  * @see org.apache.dubbo.rpc.protocol.AbstractInvoker
@@ -36,6 +37,7 @@ public interface Invoker<T> extends Node {
 
     /**
      * invoke.
+     * 它有可能是一个本地的实现，也可能是一个远程的实现，也可能一个集群实现。
      *
      * @param invocation
      * @return result
