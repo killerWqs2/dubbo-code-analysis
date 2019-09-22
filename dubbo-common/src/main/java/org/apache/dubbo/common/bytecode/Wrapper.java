@@ -121,6 +121,7 @@ public abstract class Wrapper {
         return ret;
     }
 
+    /**这个步骤是干什么的？？？*/
     private static Wrapper makeWrapper(Class<?> c) {
         if (c.isPrimitive()) {
             throw new IllegalArgumentException("Can not create wrapper for primitive type: " + c);

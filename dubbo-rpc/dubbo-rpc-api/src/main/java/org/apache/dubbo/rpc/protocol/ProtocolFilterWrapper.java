@@ -79,6 +79,7 @@ public class ProtocolFilterWrapper implements Protocol {
                     public Result invoke(Invocation invocation) throws RpcException {
                         Result asyncResult;
                         try {
+                            // 这一步调用后一个filter的invoke方法
                             asyncResult = filter.invoke(next, invocation);
                         } catch (Exception e) {
                             // onError callback
@@ -119,6 +120,7 @@ public class ProtocolFilterWrapper implements Protocol {
         if (REGISTRY_PROTOCOL.equals(invoker.getUrl().getProtocol())) {
             return protocol.export(invoker);
         }
+        // 这真的是wrapper，装饰器模式
         return protocol.export(buildInvokerChain(invoker, SERVICE_FILTER_KEY, CommonConstants.PROVIDER));
     }
 

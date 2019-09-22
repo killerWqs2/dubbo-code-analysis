@@ -303,6 +303,7 @@ public class DubboProtocol extends AbstractProtocol {
             }
         }
 
+        // 这里会创建server，也许是用来暴露服务的吧
         openServer(url);
         optimizeSerialization(url);
 
