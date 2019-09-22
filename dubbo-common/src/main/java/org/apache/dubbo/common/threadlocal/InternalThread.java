@@ -19,6 +19,7 @@ package org.apache.dubbo.common.threadlocal;
 
 /**
  * InternalThread
+ * 这个内部线程应该就是dubbo内部自己使用的线程，微内核microcore
  */
 public class InternalThread extends Thread {
 

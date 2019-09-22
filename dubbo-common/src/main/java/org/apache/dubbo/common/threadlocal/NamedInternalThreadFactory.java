@@ -37,9 +37,11 @@ public class NamedInternalThreadFactory extends NamedThreadFactory {
         super(prefix, daemon);
     }
 
+    /**完全一样的复写*/
     @Override
     public Thread newThread(Runnable runnable) {
         String name = mPrefix + mThreadNum.getAndIncrement();
+
         InternalThread ret = new InternalThread(mGroup, runnable, name, 0);
         ret.setDaemon(mDaemon);
         return ret;

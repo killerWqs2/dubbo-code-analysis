@@ -452,8 +452,11 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
     /**这一步应该不仅生成url、还应该启动了服务， 所以是怎么启动的，看源码不应该仅仅看怎么执行的，还应该看怎么写的*/
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void doExportUrls() {
+        // export应该只是暴露出服务，开启netty server应该需要独立的一步
         // registryURLs 应该是registry地址
         List<URL> registryURLs = loadRegistries(true);
+
+        // 循环 `protocols` ，向逐个注册中心分组暴露服务。
         for (ProtocolConfig protocolConfig : protocols) {
             String pathKey = URL.buildKey(getContextPath(protocolConfig).map(p -> p + "/" + path).orElse(path), group, version);
             ProviderModel providerModel = new ProviderModel(pathKey, ref, interfaceClass);
@@ -588,6 +591,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
         if (!SCOPE_NONE.equalsIgnoreCase(scope)) {
 
             // export to local if the config is not remote (export to remote only when config is remote)
+            // 暴露服务到本地，injvm也就是供同一个服务调用
             if (!SCOPE_REMOTE.equalsIgnoreCase(scope)) {
                 exportLocal(url);
             }
@@ -657,6 +661,8 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
                 .setHost(LOCALHOST_VALUE)
                 .setPort(0)
                 .build();
+        // 最后还是procotolConfig导出
+        // TODO 导出的时候还生成了proxy对象，我有点想知道netty是如何实现的
         Exporter<?> exporter = protocol.export(
                 PROXY_FACTORY.getInvoker(ref, (Class) interfaceClass, local));
         exporters.add(exporter);

@@ -38,8 +38,9 @@ public @interface Adaptive {
      * Decide which target extension to be injected. The name of the target extension is decided by the parameter passed
      * in the URL, and the parameter names are given by this method.
      * <p>
-     * If the specified parameters are not found from {@link URL}, then the default extension will be used for
-     * dependency injection (specified in its interface's {@link SPI}).
+     * If the specified parameters are not found from {@link URL},
+     * 如果没有从url中找到合适的注入bean就使用@SPI标记的类作为默认的注入
+     * then the default extension will be used for dependency injection (specified in its interface's {@link SPI}).
      * <p>
      * For example, given <code>String[] {"key1", "key2"}</code>:
      * <ol>

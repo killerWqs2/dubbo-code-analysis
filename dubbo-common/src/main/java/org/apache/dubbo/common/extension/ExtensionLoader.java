@@ -483,7 +483,9 @@ public class ExtensionLoader<T> {
     }
 
     @SuppressWarnings("unchecked")
+    /**spi自适应，从url中获取数据*/
     public T getAdaptiveExtension() {
+        // 好复杂不知道在干什么？？？
         Object instance = cachedAdaptiveInstance.get();
         if (instance == null) {
             if (createAdaptiveInstanceError != null) {

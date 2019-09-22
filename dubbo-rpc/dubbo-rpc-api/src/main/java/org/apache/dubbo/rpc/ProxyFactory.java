@@ -41,7 +41,7 @@ public interface ProxyFactory {
      * create proxy.
      * 在暴露服务时调用
      * @param invoker
-     * @return proxy
+     * @return proxy；
      */
     @Adaptive({PROXY_KEY})
     <T> T getProxy(Invoker<T> invoker, boolean generic) throws RpcException;

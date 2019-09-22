@@ -16,6 +16,8 @@
  */
 package org.apache.dubbo.common.utils;
 
+import org.apache.dubbo.common.threadlocal.InternalThread;
+
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -52,7 +54,9 @@ public class NamedThreadFactory implements ThreadFactory {
     @Override
     public Thread newThread(Runnable runnable) {
         String name = mPrefix + mThreadNum.getAndIncrement();
+        // 线程可以有自己的名称因为是java封装的结果，线程真正执行的方法是start0，是一个原生的方法，所以实际上就是c创建
         Thread ret = new Thread(mGroup, runnable, name, 0);
+        // 设置为守护进程
         ret.setDaemon(mDaemon);
         return ret;
     }
