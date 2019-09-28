@@ -19,6 +19,7 @@ package org.apache.dubbo.common.compiler;
 import org.apache.dubbo.common.extension.SPI;
 
 /**
+ * 这个是指默认的吗？？？使用 Dubbo SPI 机制，默认拓展为 Javassist 。
  * Compiler. (SPI, Singleton, ThreadSafe)
  */
 @SPI("javassist")
@@ -27,7 +28,7 @@ public interface Compiler {
     /**
      * Compile java source code.
      *
-     * @param code        Java source code
+     * @param code        Java source code java代码字符串，这是什么 字符串？？？，好吧也许是我想太多了
      * @param classLoader classloader
      * @return Compiled class
      */

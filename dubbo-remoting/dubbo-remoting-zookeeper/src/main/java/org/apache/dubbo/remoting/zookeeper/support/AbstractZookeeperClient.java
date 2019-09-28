@@ -36,16 +36,20 @@ public abstract class AbstractZookeeperClient<TargetDataListener, TargetChildLis
 
     protected static final Logger logger = LoggerFactory.getLogger(AbstractZookeeperClient.class);
 
+    /**注册中心url*/
     private final URL url;
 
+    /**状态监听器*/
     private final Set<StateListener> stateListeners = new CopyOnWriteArraySet<StateListener>();
 
+    /**节点变更监听器*/
     private final ConcurrentMap<String, ConcurrentMap<ChildListener, TargetChildListener>> childListeners = new ConcurrentHashMap<String, ConcurrentMap<ChildListener, TargetChildListener>>();
 
     private final ConcurrentMap<String, ConcurrentMap<DataListener, TargetDataListener>> listeners = new ConcurrentHashMap<String, ConcurrentMap<DataListener, TargetDataListener>>();
 
     private volatile boolean closed = false;
 
+    /**永久存在节点路径*/
     private final Set<String>  persistentExistNodePath = new ConcurrentHashSet<>();
 
     public AbstractZookeeperClient(URL url) {
@@ -72,6 +76,7 @@ public abstract class AbstractZookeeperClient<TargetDataListener, TargetChildLis
                 return;
             }
             if (checkExists(path)) {
+                // 为什么存在的时候加入？？？因为不包含啊
                 persistentExistNodePath.add(path);
                 return;
             }
@@ -104,13 +109,17 @@ public abstract class AbstractZookeeperClient<TargetDataListener, TargetChildLis
 
     @Override
     public List<String> addChildListener(String path, final ChildListener listener) {
+        // 获取路径下的监听数组
         ConcurrentMap<ChildListener, TargetChildListener> listeners = childListeners.get(path);
         if (listeners == null) {
             childListeners.putIfAbsent(path, new ConcurrentHashMap<ChildListener, TargetChildListener>());
             listeners = childListeners.get(path);
         }
+
+        // listener同一个对象获取
         TargetChildListener targetListener = listeners.get(listener);
         if (targetListener == null) {
+            // 所以说其实就是一个容器
             listeners.putIfAbsent(listener, createTargetChildListener(path, listener));
             targetListener = listeners.get(listener);
         }
@@ -167,11 +176,13 @@ public abstract class AbstractZookeeperClient<TargetDataListener, TargetChildLis
 
     @Override
     public void close() {
+        // 需要做一些通用判断逻辑，所以需要抽象一层，抽象就是提取出共性，对是这样
         if (closed) {
             return;
         }
         closed = true;
         try {
+            // 调用具体框架实现的关闭操作
             doClose();
         } catch (Throwable t) {
             logger.warn(t.getMessage(), t);

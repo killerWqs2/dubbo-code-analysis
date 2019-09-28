@@ -32,6 +32,7 @@ public abstract class AbstractCompiler implements Compiler {
 
     @Override
     public Class<?> compile(String code, ClassLoader classLoader) {
+        // 通过字符串解析出相应的类信息，然后生成代理类
         code = code.trim();
         Matcher matcher = PACKAGE_PATTERN.matcher(code);
         String pkg;
@@ -47,6 +48,8 @@ public abstract class AbstractCompiler implements Compiler {
         } else {
             throw new IllegalArgumentException("No such class name in " + code);
         }
+
+        // 获取完整类名
         String className = pkg != null && pkg.length() > 0 ? pkg + "." + cls : cls;
         try {
             return Class.forName(className, true, org.apache.dubbo.common.utils.ClassUtils.getCallerClassLoader(getClass()));
@@ -55,6 +58,7 @@ public abstract class AbstractCompiler implements Compiler {
                 throw new IllegalStateException("The java code not endsWith \"}\", code: \n" + code + "\n");
             }
             try {
+                // 抽象出公共部分，真正的实现在下面
                 return doCompile(className, code);
             } catch (RuntimeException t) {
                 throw t;

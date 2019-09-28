@@ -24,6 +24,7 @@ public interface StateListener {
 
     int RECONNECTED = 2;
 
+    // 回调函数
     void stateChanged(int connected);
 
 }

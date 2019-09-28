@@ -40,6 +40,7 @@ public class AdaptiveClassCodeGenerator {
 
     private static final String CODE_IMPORTS = "import %s;\n";
 
+    /**怪不得生成的类中含有$Adaptive*/
     private static final String CODE_CLASS_DECLARATION = "public class %s$Adaptive implements %s {\n";
 
     private static final String CODE_METHOD_DECLARATION = "public %s %s(%s) %s {\n%s}\n";
@@ -90,11 +91,13 @@ public class AdaptiveClassCodeGenerator {
             throw new IllegalStateException("No adaptive method exist on extension " + type.getName() + ", refuse to create the adaptive class!");
         }
 
+        // 我都惊呆了，这里尽然使用类读取，读取的不是文件，这是为什么呢？？？，效率？？
         StringBuilder code = new StringBuilder();
         code.append(generatePackageInfo());
         code.append(generateImports());
         code.append(generateClassDeclaration());
 
+        // 属性呢？？可能没有属性所有的都属于方法
         Method[] methods = type.getMethods();
         for (Method method : methods) {
             code.append(generateMethod(method));

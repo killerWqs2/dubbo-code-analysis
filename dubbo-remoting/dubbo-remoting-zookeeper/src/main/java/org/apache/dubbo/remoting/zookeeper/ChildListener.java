@@ -20,6 +20,9 @@ import java.util.List;
 
 public interface ChildListener {
 
+    /**
+     * 子节点发生改变的回调，应该是用来通知订阅者的
+     * */
     void childChanged(String path, List<String> children);
 
 }

@@ -46,6 +46,7 @@ import static org.apache.dubbo.rpc.protocol.dubbo.Constants.DEFAULT_DECODE_IN_IO
 
 /**
  * Dubbo codec.
+ * dubbo 解码编码器
  */
 public class DubboCodec extends ExchangeCodec {
 

@@ -21,10 +21,13 @@ import org.apache.dubbo.common.URL;
 import java.util.List;
 import java.util.concurrent.Executor;
 
+/**dubbo 内部zookeeperClient的抽象接口*/
 public interface ZookeeperClient {
 
+    /**创建节点路劲，ephemeral判断是否为临时节点， ephemeral：短暂的*/
     void create(String path, boolean ephemeral);
 
+    /**删除路径*/
     void delete(String path);
 
     List<String> getChildren(String path);
@@ -56,6 +59,7 @@ public interface ZookeeperClient {
 
     void close();
 
+    /**获取注册中心url*/
     URL getUrl();
 
     void create(String path, String content, boolean ephemeral);

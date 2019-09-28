@@ -137,6 +137,7 @@ public class ZookeeperRegistry extends FailbackRegistry {
                 }
                 ChildListener zkListener = listeners.get(listener);
                 if (zkListener == null) {
+                    // 使用lambda表达式实现节点变动订阅
                     listeners.putIfAbsent(listener, (parentPath, currentChilds) -> {
                         for (String child : currentChilds) {
                             child = URL.decode(child);

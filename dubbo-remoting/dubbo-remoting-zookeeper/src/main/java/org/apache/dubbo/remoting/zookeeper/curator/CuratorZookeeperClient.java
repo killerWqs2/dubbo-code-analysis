@@ -84,6 +84,7 @@ public class CuratorZookeeperClient extends AbstractZookeeperClient<CuratorZooke
                     }
                 }
             });
+            // 开始建立连接
             client.start();
             boolean connected = client.blockUntilConnected(timeout, TimeUnit.MILLISECONDS);
             if (!connected) {
@@ -203,6 +204,7 @@ public class CuratorZookeeperClient extends AbstractZookeeperClient<CuratorZooke
 
     @Override
     public CuratorZookeeperClient.CuratorWatcherImpl createTargetChildListener(String path, ChildListener listener) {
+        // curator 封装了很多的行为
         return new CuratorZookeeperClient.CuratorWatcherImpl(client, listener);
     }
 
