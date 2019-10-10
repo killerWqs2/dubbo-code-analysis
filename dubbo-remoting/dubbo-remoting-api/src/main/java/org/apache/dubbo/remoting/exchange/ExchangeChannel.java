@@ -23,12 +23,13 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * ExchangeChannel. (API/SPI, Prototype, ThreadSafe)
+ *
+ * 简单来说，exchange就是http， transporter就是tcp的再一次抽象
  */
 public interface ExchangeChannel extends Channel {
-
     /**
      * send request.
-     *
+     * 我才是在这里调用编解码器的
      * @param request
      * @return response future
      * @throws RemotingException

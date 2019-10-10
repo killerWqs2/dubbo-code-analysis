@@ -24,7 +24,7 @@ import java.util.List;
 
 /**
  * This is a builder for build {@link MethodConfig}.
- *
+ * 这种builder，链式调用，最后build
  * @since 2.7
  */
 public class MethodBuilder extends AbstractMethodBuilder<MethodConfig, MethodBuilder> {

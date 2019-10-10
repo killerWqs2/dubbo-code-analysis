@@ -22,6 +22,7 @@ import org.apache.dubbo.remoting.buffer.ChannelBuffer;
 
 import java.io.IOException;
 
+/**这里是api层， 定义了一堆的domain */
 @SPI
 public interface Codec2 {
 

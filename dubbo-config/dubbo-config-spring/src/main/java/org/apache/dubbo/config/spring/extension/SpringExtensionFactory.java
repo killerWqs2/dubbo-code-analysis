@@ -68,6 +68,7 @@ public class SpringExtensionFactory implements ExtensionFactory {
     @Override
     @SuppressWarnings("unchecked")
     public <T> T getExtension(Class<T> type, String name) {
+        // TODO 这里IOC完全交给spring context管理
 
         //SPI should be get from SpiExtensionFactory
         if (type.isInterface() && type.isAnnotationPresent(SPI.class)) {
