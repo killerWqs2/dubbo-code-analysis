@@ -24,7 +24,8 @@ import org.apache.dubbo.remoting.Endpoint;
 import org.apache.dubbo.remoting.RemotingException;
 
 /**
- * AbstractPeer
+ * AbstractPeer, 就继承了Endpoint和ChannelHandler
+ * 为什么持有了一个ChannelHandler 还要继承他呢？？？ 代理？？？
  */
 public abstract class AbstractPeer implements Endpoint, ChannelHandler {
 
@@ -131,6 +132,7 @@ public abstract class AbstractPeer implements Endpoint, ChannelHandler {
         handler.disconnected(ch);
     }
 
+    /**消息已发送回调*/
     @Override
     public void sent(Channel ch, Object msg) throws RemotingException {
         if (closed) {

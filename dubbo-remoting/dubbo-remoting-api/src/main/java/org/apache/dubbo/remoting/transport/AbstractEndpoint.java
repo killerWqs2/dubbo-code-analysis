@@ -31,7 +31,7 @@ import static org.apache.dubbo.common.constants.CommonConstants.DEFAULT_TIMEOUT;
 import static org.apache.dubbo.common.constants.CommonConstants.TIMEOUT_KEY;
 
 /**
- * AbstractEndpoint
+ * AbstractEndpoint, 主要是是实现了Resetable接口， 处理了个codec
  */
 public abstract class AbstractEndpoint extends AbstractPeer implements Resetable {
 
@@ -52,6 +52,7 @@ public abstract class AbstractEndpoint extends AbstractPeer implements Resetable
 
     protected static Codec2 getChannelCodec(URL url) {
         String codecName = url.getParameter(Constants.CODEC_KEY, "telnet");
+        // 从扩展中加载编解码器， 为什么要通过url来确定资源
         if (ExtensionLoader.getExtensionLoader(Codec2.class).hasExtension(codecName)) {
             return ExtensionLoader.getExtensionLoader(Codec2.class).getExtension(codecName);
         } else {
@@ -62,6 +63,7 @@ public abstract class AbstractEndpoint extends AbstractPeer implements Resetable
 
     @Override
     public void reset(URL url) {
+        // 重置url
         if (isClosed()) {
             throw new IllegalStateException("Failed to reset parameters "
                     + url + ", cause: Channel closed. channel: " + getLocalAddress());

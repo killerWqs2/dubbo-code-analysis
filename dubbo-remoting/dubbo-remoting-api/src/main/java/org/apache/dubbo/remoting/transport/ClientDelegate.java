@@ -24,6 +24,8 @@ import org.apache.dubbo.remoting.RemotingException;
 import java.net.InetSocketAddress;
 
 /**
+ * 这个类有什么意义吗？
+ * 感觉面向接口编程是不需要这个的。
  * ClientDelegate
  */
 public class ClientDelegate implements Client {

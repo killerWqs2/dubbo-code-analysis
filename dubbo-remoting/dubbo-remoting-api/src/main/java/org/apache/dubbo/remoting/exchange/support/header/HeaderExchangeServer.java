@@ -48,6 +48,8 @@ import static org.apache.dubbo.remoting.utils.UrlUtils.getIdleTimeout;
 
 /**
  * ExchangeServerImpl
+ * 基于消息头部的交换
+ *
  */
 public class HeaderExchangeServer implements ExchangeServer {
 
@@ -234,6 +236,7 @@ public class HeaderExchangeServer implements ExchangeServer {
             throw new RemotingException(this.getLocalAddress(), null, "Failed to send message " + message
                     + ", cause: The server " + getLocalAddress() + " is closed!");
         }
+        // 这个send方法应该构造了header
         server.send(message);
     }
 

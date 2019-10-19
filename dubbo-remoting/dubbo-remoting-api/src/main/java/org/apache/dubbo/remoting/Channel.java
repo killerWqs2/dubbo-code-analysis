@@ -19,6 +19,9 @@ package org.apache.dubbo.remoting;
 import java.net.InetSocketAddress;
 
 /**
+ * 这个channel实际上是dubbo抽象出来的channel，用来代理不同通信框架的实现channel
+ *
+ * 其实我一直想知道为什么抽象出来的东西叫做channel，信道？？？ 代表一个连接
  * Channel. (API/SPI, Prototype, ThreadSafe)
  *
  * @see org.apache.dubbo.remoting.Client
@@ -28,7 +31,7 @@ import java.net.InetSocketAddress;
 public interface Channel extends Endpoint {
 
     /**
-     * get remote address.
+     * get remote address. 远程地址
      *
      * @return remote address.
      */

@@ -27,7 +27,7 @@ import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
- * ChannelListenerDispatcher
+ * ChannelListenerDispatcher， 还不如叫ChannelListenerComposite
  */
 public class ChannelHandlerDispatcher implements ChannelHandler {
 
@@ -66,6 +66,7 @@ public class ChannelHandlerDispatcher implements ChannelHandler {
     public void connected(Channel channel) {
         for (ChannelHandler listener : channelHandlers) {
             try {
+                // 为什么每个都会调用
                 listener.connected(channel);
             } catch (Throwable t) {
                 logger.error(t.getMessage(), t);

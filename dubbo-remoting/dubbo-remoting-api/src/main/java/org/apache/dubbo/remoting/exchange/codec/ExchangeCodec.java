@@ -43,6 +43,7 @@ import java.io.InputStream;
 
 /**
  * ExchangeCodec.
+ * 其实为什么要继承TelnetCodec
  */
 public class ExchangeCodec extends TelnetCodec {
 

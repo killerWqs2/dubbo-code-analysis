@@ -29,6 +29,7 @@ public class AllDispatcher implements Dispatcher {
 
     @Override
     public ChannelHandler dispatch(ChannelHandler handler, URL url) {
+        // 这个是关键性的东西， 这个应该是真正开始的业务逻辑起点
         return new AllChannelHandler(handler, url);
     }
 

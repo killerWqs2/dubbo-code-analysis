@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Request.
+ * 这个是一个抽象，序列化为某一个请求
  */
 public class Request {
 
@@ -31,16 +32,20 @@ public class Request {
 
     private static final AtomicLong INVOKE_ID = new AtomicLong(0);
 
+    /**请求序列号，jvm内唯一*/
     private final long mId;
 
+    /**请求协议版本*/
     private String mVersion;
 
     private boolean mTwoWay = true;
 
     private boolean mEvent = false;
 
+    /**请求是否异常*/
     private boolean mBroken = false;
 
+    /**请求数据*/
     private Object mData;
 
     public Request() {

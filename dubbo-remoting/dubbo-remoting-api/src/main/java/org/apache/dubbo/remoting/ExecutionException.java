@@ -20,6 +20,7 @@ import java.net.InetSocketAddress;
 
 /**
  * ReceiveException
+ * 其实我很想知道dubbo是怎么捕获异常然后传给客户端的
  *
  * @export
  */

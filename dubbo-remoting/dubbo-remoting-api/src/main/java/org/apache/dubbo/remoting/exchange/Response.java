@@ -80,6 +80,7 @@ public class Response {
      */
     public static final byte SERVER_THREADPOOL_EXHAUSTED_ERROR = 100;
 
+    /**与请求的mid对应，类似于http中url对应*/
     private long mId = 0;
 
     private String mVersion;

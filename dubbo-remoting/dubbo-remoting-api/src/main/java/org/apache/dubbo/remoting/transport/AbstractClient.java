@@ -42,6 +42,7 @@ import static org.apache.dubbo.common.constants.CommonConstants.THREADPOOL_KEY;
 
 /**
  * AbstractClient
+ * dubbo在代码设计上大量使用了模板设计模式
  */
 public abstract class AbstractClient extends AbstractEndpoint implements Client {
 
@@ -54,9 +55,11 @@ public abstract class AbstractClient extends AbstractEndpoint implements Client 
     public AbstractClient(URL url, ChannelHandler handler) throws RemotingException {
         super(url, handler);
 
+        // 需要重新连接为什么会从url中获取参数？
         needReconnect = url.getParameter(Constants.SEND_RECONNECT_KEY, false);
 
         try {
+            // 打开一个端口，初始化一个bootstrap
             doOpen();
         } catch (Throwable t) {
             close();
@@ -66,6 +69,7 @@ public abstract class AbstractClient extends AbstractEndpoint implements Client 
         }
         try {
             // connect.
+            // 使用初始化完成的bootstrap完成服务器端连接
             connect();
             if (logger.isInfoEnabled()) {
                 logger.info("Start " + getClass().getSimpleName() + " " + NetUtils.getLocalAddress() + " connect to the server " + getRemoteAddress());
@@ -85,6 +89,8 @@ public abstract class AbstractClient extends AbstractEndpoint implements Client 
                             + " connect to the server " + getRemoteAddress() + ", cause: " + t.getMessage(), t);
         }
 
+        // 获取线程池， DataStore
+        // 从dataStore（数据存储）中
         executor = (ExecutorService) ExtensionLoader.getExtensionLoader(DataStore.class)
                 .getDefaultExtension().get(CONSUMER_SIDE, Integer.toString(url.getPort()));
         ExtensionLoader.getExtensionLoader(DataStore.class)
@@ -178,7 +184,7 @@ public abstract class AbstractClient extends AbstractEndpoint implements Client 
     }
 
     protected void connect() throws RemotingException {
-
+        // 没有初始化重连线程
         connectLock.lock();
 
         try {

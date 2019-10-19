@@ -46,7 +46,7 @@ import static org.apache.dubbo.rpc.protocol.dubbo.Constants.DEFAULT_DECODE_IN_IO
 
 /**
  * Dubbo codec.
- * dubbo 解码编码器
+ * dubbo 解码编码器， 解码解的是body的，也就是说body也有格式
  */
 public class DubboCodec extends ExchangeCodec {
 

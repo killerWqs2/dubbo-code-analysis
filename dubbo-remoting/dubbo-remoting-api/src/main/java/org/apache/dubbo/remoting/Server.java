@@ -38,14 +38,14 @@ public interface Server extends Endpoint, Resetable, IdleSensible {
     boolean isBound();
 
     /**
-     * get channels.
+     * get channels.Server可以持有多个channel对象，server本身不是一个Channel，所以channel是对客户端的抽象
      *
      * @return channels
      */
     Collection<Channel> getChannels();
 
     /**
-     * get channel.
+     * get channel. channel 继承了 EndPoint endpoint是对通信端口的抽象
      *
      * @param remoteAddress
      * @return channel

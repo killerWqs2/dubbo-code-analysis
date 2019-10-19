@@ -35,6 +35,7 @@ import static org.apache.dubbo.common.constants.CommonConstants.DEFAULT_TIMEOUT;
 import static org.apache.dubbo.common.constants.CommonConstants.TIMEOUT_KEY;
 
 /**
+ * 接口是抽象，类是具象，封装了一切相关的具体信息。
  * NettyChannel maintains the cache of channel.
  */
 final class NettyChannel extends AbstractChannel {

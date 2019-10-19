@@ -65,9 +65,11 @@ public abstract class AbstractServer extends AbstractEndpoint implements Server 
             bindIp = ANYHOST_VALUE;
         }
         bindAddress = new InetSocketAddress(bindIp, bindPort);
+
         this.accepts = url.getParameter(ACCEPTS_KEY, DEFAULT_ACCEPTS);
         this.idleTimeout = url.getParameter(IDLE_TIMEOUT_KEY, DEFAULT_IDLE_TIMEOUT);
         try {
+            // 调用子类方法，开启服务器
             doOpen();
             if (logger.isInfoEnabled()) {
                 logger.info("Start " + getClass().getSimpleName() + " bind " + getBindAddress() + ", export " + getLocalAddress());
@@ -203,6 +205,7 @@ public abstract class AbstractServer extends AbstractEndpoint implements Server 
             ch.close();
             return;
         }
+        // 处理连接请求
         super.connected(ch);
     }
 

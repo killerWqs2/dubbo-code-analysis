@@ -81,12 +81,13 @@ public class NettyClient extends AbstractClient {
     }
 
     /**
-     * Init bootstrap
+     * Init bootstrap， 这里只是初始化
      *
      * @throws Throwable
      */
     @Override
     protected void doOpen() throws Throwable {
+        // 为什么一个类要聚合这么多功能，不是单一职责吗？启动netty
         final NettyClientHandler nettyClientHandler = new NettyClientHandler(getUrl(), this);
         bootstrap = new Bootstrap();
         bootstrap.group(nioEventLoopGroup)
