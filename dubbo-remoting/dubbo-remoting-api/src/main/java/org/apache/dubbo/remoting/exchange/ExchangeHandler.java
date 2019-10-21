@@ -23,7 +23,7 @@ import org.apache.dubbo.remoting.telnet.TelnetHandler;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * ExchangeHandler. (API, Prototype, ThreadSafe), 为什么我没有看到netty的影子，一个发呆，一个玩游戏到底浪费了我多少时间
+ * ExchangeHandler. (API, Prototype, ThreadSafe), 为什么我没有看到netty的影子
  */
 public interface ExchangeHandler extends ChannelHandler, TelnetHandler {
 

@@ -109,6 +109,7 @@ public class NettyServer extends AbstractServer implements Server {
                         // FIXME: should we use getTimeout()?
                         int idleTimeout = UrlUtils.getIdleTimeout(getUrl());
                         NettyCodecAdapter adapter = new NettyCodecAdapter(getCodec(), getUrl(), NettyServer.this);
+                        // 原始数据处理通道？？
                         ch.pipeline()//.addLast("logging",new LoggingHandler(LogLevel.INFO))//for debug
                                 .addLast("decoder", adapter.getDecoder())
                                 .addLast("encoder", adapter.getEncoder())
@@ -117,7 +118,7 @@ public class NettyServer extends AbstractServer implements Server {
                     }
                 });
         // bind
-        // 返回了一个future，里面使用线程池
+        // 返回了一个future，里面使用线程池，绑定地址
         ChannelFuture channelFuture = bootstrap.bind(getBindAddress());
         channelFuture.syncUninterruptibly();
         channel = channelFuture.channel();

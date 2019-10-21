@@ -118,6 +118,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
      * Actually，when the {@link ExtensionLoader} init the {@link Protocol} instants,it will automatically wraps two
      * layers, and eventually will get a <b>ProtocolFilterWrapper</b> or <b>ProtocolListenerWrapper</b>
      */
+    // TODO 这里通过扩展loader加载protocol，protocol里面有启动服务器的操作
     private static final Protocol protocol = ExtensionLoader.getExtensionLoader(Protocol.class).getAdaptiveExtension();
 
     /**
@@ -368,6 +369,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
     }
 
     public synchronized void export() {
+        // 所以他是在哪儿开启netty服务器的，明天早上计划了解dubbo是如何与spring结合的
         checkAndUpdateSubConfigs();
 
         if (!shouldExport()) {
@@ -622,6 +624,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
                             registryURL = registryURL.addParameter(PROXY_KEY, proxy);
                         }
 
+                        // 这个invoker不一定跟service挂钩，应该是跟server相关的
                         Invoker<?> invoker = PROXY_FACTORY.getInvoker(ref, (Class) interfaceClass, registryURL.addParameterAndEncoded(EXPORT_KEY, url.toFullString()));
                         DelegateProviderMetaDataInvoker wrapperInvoker = new DelegateProviderMetaDataInvoker(invoker, this);
 
@@ -786,6 +789,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
             }
             final int defaultPort = ExtensionLoader.getExtensionLoader(Protocol.class).getExtension(name).getDefaultPort();
             if (portToBind == null || portToBind == 0) {
+                // 这里使用默认端口
                 portToBind = defaultPort;
             }
             if (portToBind <= 0) {

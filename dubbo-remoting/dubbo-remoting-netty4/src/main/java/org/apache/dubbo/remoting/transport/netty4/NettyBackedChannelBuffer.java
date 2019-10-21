@@ -28,7 +28,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
-/**这个类的主要目的就是适配， Adapter，为什么不叫NettyChannelBufferAdapter*/
+/**这个类的主要目的就是适配， Adapter，为什么不叫NettyChannelBufferAdapter, buffer这种东西确实很重要*/
 public class NettyBackedChannelBuffer implements ChannelBuffer {
 
     private ByteBuf buffer;

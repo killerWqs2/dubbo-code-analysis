@@ -25,13 +25,17 @@ import org.apache.dubbo.remoting.Transporter;
 
 /**
  * Default extension of {@link Transporter} using netty4.x.
+ *
+ * 为什么要这个transporter接口，意义何在？
  */
 public class NettyTransporter implements Transporter {
 
+    // 默认应该就是netty4
     public static final String NAME = "netty";
 
     @Override
     public Server bind(URL url, ChannelHandler listener) throws RemotingException {
+        // 这里的ChannelHandler是核心流程的起点，dispatch -> invoke -> 
         return new NettyServer(url, listener);
     }
 

@@ -86,6 +86,7 @@ public class ServiceAnnotationBeanPostProcessor implements BeanDefinitionRegistr
 
     private final Set<String> packagesToScan;
 
+    /** 所以dubbo项目还是依赖了spring boot*/
     private Environment environment;
 
     private ResourceLoader resourceLoader;
@@ -122,7 +123,7 @@ public class ServiceAnnotationBeanPostProcessor implements BeanDefinitionRegistr
 
     /**
      * Registers Beans whose classes was annotated {@link Service}
-     *
+     * 通过BeanPostProcessor 来注入ServiceBean， 但是server在哪儿启动的呢？？？
      * @param packagesToScan The base packages to scan
      * @param registry       {@link BeanDefinitionRegistry}
      */
@@ -157,6 +158,7 @@ public class ServiceAnnotationBeanPostProcessor implements BeanDefinitionRegistr
             if (!CollectionUtils.isEmpty(beanDefinitionHolders)) {
 
                 for (BeanDefinitionHolder beanDefinitionHolder : beanDefinitionHolders) {
+                    // 这里注入servicebean并且 暴露服务，关键是netty server是怎么启动的？？？
                     registerServiceBean(beanDefinitionHolder, registry, scanner);
                 }
 

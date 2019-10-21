@@ -34,6 +34,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * NettyServerHandler.
+ * 继承了netty 的channelhandler
  */
 @io.netty.channel.ChannelHandler.Sharable
 public class NettyServerHandler extends ChannelDuplexHandler {

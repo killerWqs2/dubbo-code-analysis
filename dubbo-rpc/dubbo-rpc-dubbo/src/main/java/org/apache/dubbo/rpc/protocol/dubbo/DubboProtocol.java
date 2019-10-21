@@ -112,6 +112,7 @@ public class DubboProtocol extends AbstractProtocol {
      */
     private final ConcurrentMap<String, String> stubServiceMethodsMap = new ConcurrentHashMap<>();
 
+    /**netty server channelHandler调用应该是从这里开始的*/
     private ExchangeHandler requestHandler = new ExchangeHandlerAdapter() {
 
         @Override
@@ -156,6 +157,7 @@ public class DubboProtocol extends AbstractProtocol {
         @Override
         public void received(Channel channel, Object message) throws RemotingException {
             if (message instanceof Invocation) {
+                // 这里应该是响应的代码
                 reply((ExchangeChannel) channel, message);
 
             } else {
@@ -165,6 +167,7 @@ public class DubboProtocol extends AbstractProtocol {
 
         @Override
         public void connected(Channel channel) throws RemotingException {
+            // TODO 这里是调用开始的代码，可以从这里开始研究
             invoke(channel, ON_CONNECT_KEY);
         }
 
@@ -317,10 +320,12 @@ public class DubboProtocol extends AbstractProtocol {
         boolean isServer = url.getParameter(IS_SERVER_KEY, true);
         if (isServer) {
             ExchangeServer server = serverMap.get(key);
+            // 如果server不存在则创建server
             if (server == null) {
                 synchronized (this) {
                     server = serverMap.get(key);
                     if (server == null) {
+                        // TODO 这里创建server
                         serverMap.put(key, createServer(url));
                     }
                 }
@@ -347,6 +352,7 @@ public class DubboProtocol extends AbstractProtocol {
 
         ExchangeServer server;
         try {
+            // 这里 exchange, transporter
             server = Exchangers.bind(url, requestHandler);
         } catch (RemotingException e) {
             throw new RpcException("Fail to start server(url: " + url + ") " + e.getMessage(), e);

@@ -83,6 +83,7 @@ final class NettyChannel extends AbstractChannel {
         if (ret == null) {
             NettyChannel nettyChannel = new NettyChannel(ch, url, handler);
             if (ch.isActive()) {
+                // ch 只是一个数据结构
                 ret = CHANNEL_MAP.putIfAbsent(ch, nettyChannel);
             }
             if (ret == null) {
@@ -102,12 +103,14 @@ final class NettyChannel extends AbstractChannel {
         }
     }
 
+    /**监听地址*/
     @Override
     public InetSocketAddress getLocalAddress() {
         return (InetSocketAddress) channel.localAddress();
     }
 
     @Override
+    /**连接地址*/
     public InetSocketAddress getRemoteAddress() {
         return (InetSocketAddress) channel.remoteAddress();
     }
@@ -132,6 +135,7 @@ final class NettyChannel extends AbstractChannel {
         boolean success = true;
         int timeout = 0;
         try {
+            // 这里调用netty channel发送数据
             ChannelFuture future = channel.writeAndFlush(message);
             if (sent) {
                 // wait timeout ms
@@ -145,6 +149,8 @@ final class NettyChannel extends AbstractChannel {
         } catch (Throwable e) {
             throw new RemotingException(this, "Failed to send message " + message + " to " + getRemoteAddress() + ", cause: " + e.getMessage(), e);
         }
+
+        // 发送还能超时不成？？
         if (!success) {
             throw new RemotingException(this, "Failed to send message " + message + " to " + getRemoteAddress()
                     + "in timeout(" + timeout + "ms) limit");
@@ -164,6 +170,7 @@ final class NettyChannel extends AbstractChannel {
             logger.warn(e.getMessage(), e);
         }
         try {
+            // 这里为什么是一个全局变量
             attributes.clear();
         } catch (Exception e) {
             logger.warn(e.getMessage(), e);
