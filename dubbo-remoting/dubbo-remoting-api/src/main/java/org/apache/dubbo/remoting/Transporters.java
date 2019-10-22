@@ -49,8 +49,10 @@ public class Transporters {
         }
         ChannelHandler handler;
         if (handlers.length == 1) {
+            // 如果handler只有一个，不需要dispatcher
             handler = handlers[0];
         } else {
+            // TODO 这里在handlers外面又包了一层
             handler = new ChannelHandlerDispatcher(handlers);
         }
         return getTransporter().bind(url, handler);

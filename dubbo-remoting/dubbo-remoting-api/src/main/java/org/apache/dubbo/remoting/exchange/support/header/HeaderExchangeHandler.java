@@ -48,6 +48,7 @@ public class HeaderExchangeHandler implements ChannelHandlerDelegate {
 
     public static final String KEY_WRITE_TIMESTAMP = HeartbeatHandler.KEY_WRITE_TIMESTAMP;
 
+    // 这个包含了dubboprotocol的匿名类
     private final ExchangeHandler handler;
 
     public HeaderExchangeHandler(ExchangeHandler handler) {

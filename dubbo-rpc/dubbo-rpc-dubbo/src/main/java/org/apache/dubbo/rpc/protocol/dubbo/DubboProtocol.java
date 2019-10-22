@@ -191,6 +191,7 @@ public class DubboProtocol extends AbstractProtocol {
         }
 
         private Invocation createInvocation(Channel channel, URL url, String methodKey) {
+            // 这里的methodkey为onconnect, 为什么从本地传过来的请求没有methodkey
             String method = url.getParameter(methodKey);
             if (method == null || method.length() == 0) {
                 return null;

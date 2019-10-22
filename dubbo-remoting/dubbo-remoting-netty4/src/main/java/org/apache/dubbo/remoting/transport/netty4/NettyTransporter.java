@@ -35,7 +35,8 @@ public class NettyTransporter implements Transporter {
 
     @Override
     public Server bind(URL url, ChannelHandler listener) throws RemotingException {
-        // 这里的ChannelHandler是核心流程的起点，dispatch -> invoke -> 
+        // 这里的ChannelHandler是核心流程的起点，dispatch -> invoke ->
+        // 这里的listener是Dispatcher
         return new NettyServer(url, listener);
     }
 

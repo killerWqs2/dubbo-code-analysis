@@ -28,7 +28,7 @@ import org.apache.dubbo.remoting.transport.DecodeHandler;
 /**
  * DefaultMessenger
  *
- *
+ * 为什么要叫HeaderExchanger，使用header作为交流的信号
  */
 public class HeaderExchanger implements Exchanger {
 
@@ -42,6 +42,7 @@ public class HeaderExchanger implements Exchanger {
 
     @Override
     public ExchangeServer bind(URL url, ExchangeHandler handler) throws RemotingException {
+        // TODO 这里真的是一环套一环
         return new HeaderExchangeServer(Transporters.bind(url, new DecodeHandler(new HeaderExchangeHandler(handler))));
     }
 

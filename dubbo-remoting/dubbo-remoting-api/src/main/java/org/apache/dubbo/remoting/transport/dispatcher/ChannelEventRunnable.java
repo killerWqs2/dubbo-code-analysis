@@ -24,6 +24,7 @@ import org.apache.dubbo.remoting.ChannelHandler;
 public class ChannelEventRunnable implements Runnable {
     private static final Logger logger = LoggerFactory.getLogger(ChannelEventRunnable.class);
 
+    /**这个包含的是DecoderHanlder*/
     private final ChannelHandler handler;
     private final Channel channel;
     private final ChannelState state;

@@ -78,6 +78,7 @@ public class NettyServer extends AbstractServer implements Server {
     public NettyServer(URL url, ChannelHandler handler) throws RemotingException {
         // you can customize name and type of client thread pool by THREAD_NAME_KEY and THREADPOOL_KEY in CommonConstants.
         // the handler will be warped: MultiMessageHandler->HeartbeatHandler->handler
+        // 这里ChannelHandlers又包裹了一层，虽然我知道怎么执行的，但是不知道为什么这么做？？？
         super(url, ChannelHandlers.wrap(handler, ExecutorUtil.setThreadName(url, SERVER_THREAD_POOL_NAME)));
     }
 
