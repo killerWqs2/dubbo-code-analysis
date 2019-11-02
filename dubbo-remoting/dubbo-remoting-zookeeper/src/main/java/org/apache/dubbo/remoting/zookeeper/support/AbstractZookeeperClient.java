@@ -82,6 +82,7 @@ public abstract class AbstractZookeeperClient<TargetDataListener, TargetChildLis
             }
         }
         int i = path.lastIndexOf('/');
+        // 这里是循环新建目录
         if (i > 0) {
             create(path.substring(0, i), false);
         }

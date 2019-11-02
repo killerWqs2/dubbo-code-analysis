@@ -55,6 +55,7 @@ public class HeaderExchangeServer implements ExchangeServer {
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
+    /**包含了一个具体实现的传输层的server*/
     private final Server server;
     private AtomicBoolean closed = new AtomicBoolean(false);
 

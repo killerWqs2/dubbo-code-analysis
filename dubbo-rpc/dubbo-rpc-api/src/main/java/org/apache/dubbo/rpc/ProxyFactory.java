@@ -39,7 +39,6 @@ public interface ProxyFactory {
 
     /**
      * create proxy.
-     * 在暴露服务时调用
      * @param invoker
      * @return proxy；
      */
@@ -48,7 +47,7 @@ public interface ProxyFactory {
 
     /**
      * create invoker.
-     *
+     * 在暴露服务时调用
      * @param <T>
      * @param proxy
      * @param type

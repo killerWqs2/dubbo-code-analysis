@@ -143,7 +143,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
     private final List<URL> urls = new ArrayList<URL>();
 
     /**
-     * The exported services
+     * The exported services,
      */
     private final List<Exporter<?>> exporters = new ArrayList<Exporter<?>>();
 
@@ -625,9 +625,11 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
                         }
 
                         // 这个invoker不一定跟service挂钩，应该是跟server相关的
+                        // 这个proxy_factory
                         Invoker<?> invoker = PROXY_FACTORY.getInvoker(ref, (Class) interfaceClass, registryURL.addParameterAndEncoded(EXPORT_KEY, url.toFullString()));
                         DelegateProviderMetaDataInvoker wrapperInvoker = new DelegateProviderMetaDataInvoker(invoker, this);
 
+                        // 注册地址就是在这一步注册到注册中心的，所以这一步发生了什么呢
                         Exporter<?> exporter = protocol.export(wrapperInvoker);
                         exporters.add(exporter);
                     }

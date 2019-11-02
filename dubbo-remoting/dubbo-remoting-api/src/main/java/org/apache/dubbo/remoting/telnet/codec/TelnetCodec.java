@@ -37,7 +37,7 @@ import static org.apache.dubbo.remoting.Constants.CHARSET_KEY;
 import static org.apache.dubbo.remoting.Constants.DEFAULT_CHARSET;
 
 /**
- * TelnetCodec, 支持telnet协议呗， 远程登录协议，就是ssh登录，ssh添加了身份校验，所谓的远程登录就是传输命令
+ * TelnetCodec, 支持telnet协议呗， 远程登录协议，网络不完全，并且没有身份校验机制
  * 在自己的系统中实现telnet协议，就可以进行所谓的远程登录
  */
 public class TelnetCodec extends TransportCodec {

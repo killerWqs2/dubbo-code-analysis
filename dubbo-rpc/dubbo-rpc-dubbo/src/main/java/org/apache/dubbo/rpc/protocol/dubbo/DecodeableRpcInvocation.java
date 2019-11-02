@@ -95,6 +95,7 @@ public class DecodeableRpcInvocation extends RpcInvocation implements Codec, Dec
 
         String dubboVersion = in.readUTF();
         request.setVersion(dubboVersion);
+        // 这里应该是一个一个字节的读取， 游标无法回去
         setAttachment(DUBBO_VERSION_KEY, dubboVersion);
 
         setAttachment(PATH_KEY, in.readUTF());

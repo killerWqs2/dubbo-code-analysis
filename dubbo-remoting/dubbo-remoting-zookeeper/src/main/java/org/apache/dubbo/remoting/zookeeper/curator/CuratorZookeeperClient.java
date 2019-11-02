@@ -108,6 +108,7 @@ public class CuratorZookeeperClient extends AbstractZookeeperClient<CuratorZooke
     @Override
     public void createEphemeral(String path) {
         try {
+            // value是在哪儿设置的呢？？？
             client.create().withMode(CreateMode.EPHEMERAL).forPath(path);
         } catch (NodeExistsException e) {
         } catch (Exception e) {

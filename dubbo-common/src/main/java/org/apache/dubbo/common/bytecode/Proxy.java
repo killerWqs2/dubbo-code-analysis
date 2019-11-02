@@ -36,7 +36,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import static org.apache.dubbo.common.constants.CommonConstants.MAX_PROXY_COUNT;
 
 /**
- * Proxy.
+ * Proxy. 生成接口代理对象 应该是只有client端才需要这个，服务端应该不需要，因为service标注在具体实现类上面所以只需要扫描到就好了
  */
 
 public abstract class Proxy {

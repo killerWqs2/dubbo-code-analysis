@@ -37,11 +37,15 @@ public class InvokerInvocationHandler implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        /** 用来处理对象的方法调用*/
         String methodName = method.getName();
         Class<?>[] parameterTypes = method.getParameterTypes();
+        // 调用继承自Object的方法
         if (method.getDeclaringClass() == Object.class) {
             return method.invoke(invoker, args);
         }
+
+        // 调用
         if ("toString".equals(methodName) && parameterTypes.length == 0) {
             return invoker.toString();
         }
@@ -52,6 +56,7 @@ public class InvokerInvocationHandler implements InvocationHandler {
             return invoker.equals(args[0]);
         }
 
+        // 远程rpc调用
         return invoker.invoke(new RpcInvocation(method, args)).recreate();
     }
 }
